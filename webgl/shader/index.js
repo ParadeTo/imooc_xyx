@@ -9,8 +9,9 @@ var vertexShader, fragmentShader
 
 VSHADER_SOURCE = '' +
     'attribute vec4 a_Position;\n' +
+    'uniform mat4 u_ModelMatrix;' +
     'void main () {\n' +
-        'gl_Position = a_Position;\n' +
+        'gl_Position = u_ModelMatrix * a_Position;\n' +
     '}\n'
 
 FSHADER_SOURCE =
@@ -62,10 +63,31 @@ var n = initVertexBuffers(gl)
 // set clear coloe
 gl.clearColor(0, 0, 0, 1)
 
+var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix')
+var modelMatrix = new Matrix4()
+
+var currentAngle = 0
+var g_last = Date.now()
+
+function tick () {
+  // update the new rotation angle
+  animate()
+  draw()
+  window.requestAnimationFrame(tick)
+}
+
+function animate () {
+  var now = Date.now()
+  var duration = now - g_last
+  g_last = now
+  currentAngle = currentAngle + duration / 1000 * 180
+}
+
 function draw () {
-  // clear canvas and add background color
+  modelMatrix.setRotate(currentAngle, 0, 1, 0)
+  gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements)
   gl.clear(gl.COLOR_BUFFER_BIT)
   gl.drawArrays(gl.TRIANGLES, 0, n)
 }
 
-draw()
+tick()
