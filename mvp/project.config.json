@@ -11,9 +11,9 @@
 		"newFeature": true
 	},
 	"compileType": "game",
-	"libVersion": "2.0.4",
+	"libVersion": "2.3.0",
 	"appid": "wx742367e9b4642d1b",
-	"projectname": "tool_demo",
+	"projectname": "mvp",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},
